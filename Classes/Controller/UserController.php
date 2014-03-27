@@ -4,10 +4,13 @@ namespace VMFDS\VmfdsKool\Controller;
 
 // override autoload:
 require_once(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:vmfds_kool/Classes/Domain/Repository/KoolUserRepository.php'));
-	
+require_once(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:vmfds_kool/Classes/Domain/Repository/KoolGroupRepository.php'));
+
 class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 	protected $koolUserRepository;
+	protected $koolGroupRepository;
+	
 	
 	/**
 	* frontendUserRepository
@@ -29,6 +32,7 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 	public function __construct() {
 		parent::__construct();
 		$this->koolUserRepository = new \VMFDS\VmfdsKool\Domain\Repository\KoolUserRepository();
+		$this->koolGroupRepository = new \VMFDS\VmfdsKool\Domain\Repository\KoolGroupRepository();
 	}
 		
 	public function helloAction() {
@@ -146,6 +150,12 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 		$person = $this->getPersonChecked($req);
 		$person = $this->makeUserName($person);
 		
+		$personGroups = $this->koolGroupRepository->findByPerson($person, 'vmfds_kool_typo3integration_usergroup', '(vmfds_kool_typo3integration_usergroup>0)');
+		$userGroups = array();
+		foreach ($personGroups as $g) {
+			$userGroups[] = $g['vmfds_kool_typo3integration_usergroup'];
+		}	
+		
 		$user = new \TYPO3\CMS\Extbase\Domain\Model\FrontendUser();
 		$user->setFirstName($person['vorname']);
 		$user->setLastName($person['nachname']);
@@ -153,10 +163,19 @@ class UserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 		$user->setUsername($person['username']);
 		$user->setPassword($req['password']);
 		
+		// add default groups specified by TS
 		$defaultGroups = explode(',',$this->settings['defaultGroups']);
 		foreach ($defaultGroups as $gid) {
 			$ug = $this->frontendUserGroupRepository->findByUid($gid);
 			$user->addUsergroup($ug);
+		}
+		
+		// add groups defined in kOOL, if not already set
+		foreach ($userGroups as $gid) {
+			if (!in_array($gid, $defaultGroups)) {
+				$ug = $this->frontendUserGroupRepository->findByUid($gid);
+				$user->addUsergroup($ug);
+			}
 		}
 		
 		// add new user to typo3
