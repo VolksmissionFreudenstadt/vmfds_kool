@@ -1,0 +1,32 @@
+<f:if condition="{people}">
+<f:then>
+	<p>
+	Folgende Einträge haben wir zu "{request.first_name} {request.last_name}" gefunden:<br /><br />
+	</p>
+	<f:form action="identify">
+		<f:for each="{people}" as="person">
+			<f:form.radio name="id" value="{person.id}" />{person.vorname} {person.nachname}, {person.adresse}, {person.plz} {person.ort}<br /> 
+		</f:for>
+		<f:form.button type="submit">Das bin ich</f:form.button><br /><br />
+	</f:form>
+	<h2>Du bist nicht dabei?</h2>
+	<p>
+	Du bist nicht dabei? Vielleicht möchtest du dich 
+	<f:link.action action="newPerson">als neue Person anmelden</f:link.action>? Falls du dich 
+	nur vertippt hast, kannst du es auch einfach 
+	<f:link.action action="hello">noch einmal versuchen</f:link.action>.
+	</p>
+</f:then>
+<f:else>
+	<p>
+	Leider konnten wir dich nicht in unserer Datenbank finden. Vielleicht möchtest du dich 
+	<f:link.action action="newPerson">als neue Person anmelden</f:link.action>? Falls du dich 
+	nur vertippt hast, kannst du es auch einfach 
+	<f:link.action action="hello">noch einmal versuchen</f:link.action>.
+	</p>
+</f:else>
+</f:if>
+<p>
+	Zur Überprüfung siehst du hier noch einmal den Namen, den du eingegeben hast:<br />
+	Vorname: <code>{request.first_name}</code>, Nachname: <code>{request.last_name}</code>
+</p>

@@ -1,0 +1,24 @@
+<f:if condition="{email}">
+<f:then>
+<p>
+	Vielen Dank für deine Anmeldung. Zur Bestätigung haben wir eine E-Mail an deine Adresse {email} geschickt. Bitte klicke den dort enthaltenen Link, um fortzufahren.
+</p>
+</f:then>
+<f:else>
+	<f:if condition="{person.geburtsdatum}">
+	<f:then>
+	<p>Leider haben wir keine E-Mailadresse von dir. 
+		Zur Bestätigung deines Benutzerkontos ist es daher notwendig, dass du dein Geburtsdatum eingibst. 
+		Bitte gebrauche dazu das Format <i>tt.mm.jjjj</i>, also zum Beispiel 02.03.1974:</p>
+		<f:form action="confirmByDOB">
+			<f:form.hidden name="id" value="{person.id}" />
+			<f:form.textfield name="dob" value="" />
+			<f:form.button type="submit">Überprüfen</f:form.button>
+		</f:form>
+	</f:then>
+	<f:else>
+	<p>Leider fehlen uns zur automatischen Einrichtung deines Benutzerkontos einige wichtige Daten. Bitte wende dich an das Gemeindebüro. Dort helfen wir dir gerne weiter.</p>
+	</f:else>
+	</f:if>
+</f:else>
+</f:if>

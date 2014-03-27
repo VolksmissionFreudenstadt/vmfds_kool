@@ -1,0 +1,20 @@
+plugin.tx_vmfdskool.view {
+	templateRootPath = EXT:vmfds_kool/Resources/Private/Templates/
+	partialRootPath  = EXT:vmfds_kool/Resources/Private/Partials/
+	layoutRootPath   = EXT:vmfds_kool/Resources/Private/Layouts/
+}
+
+plugin.tx_vmfdskool {
+  settings {
+  	defaultGroups = 4
+  } 
+  persistence {
+    storagePid = 240
+    Tx_Extbase_Domain_Model_FrontendUser {
+      mapping {
+        tableName = fe_users
+        #recordType = Tx_Extbase_Domain_Model_FrontendUser
+      }
+    }
+  }
+}
