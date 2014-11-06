@@ -29,10 +29,6 @@ class BirthdayListViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
 			  .'AND '.strftime('%j', $endDate).') '
 			  .'AND FIND_IN_SET(\'g000120:r000001\', groups) '
 			  .'ORDER BY DAYOFYEAR(DATE_ADD(geburtsdatum, INTERVAL (YEAR(NOW()) - YEAR(geburtsdatum)) YEAR))';
-<<<<<<< HEAD
-=======
-//			  .'ORDER BY DAYOFYEAR(geburtsdatum);';
->>>>>>> 36e120a05a9b81291fd0d50f05412aebdd546786
 	  	$people = $kool->query($sql);
 	  	if ($people) {
 	  		$o = '<h3>Geburtstage</h3>';
